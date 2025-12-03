@@ -1,0 +1,6 @@
+services:
+  medicalequipmentmanagementsystem:
+    image: ${DOCKER_REGISTRY-}medicalequipmentmanagementsystem
+    build:
+      context: .
+      dockerfile: MedicalEquipmentManagementSystem/Dockerfile
