@@ -1,0 +1,4 @@
+# Ignore all files in this directory (PostgreSQL data)
+*
+# But keep this .gitignore file
+!.gitignore
