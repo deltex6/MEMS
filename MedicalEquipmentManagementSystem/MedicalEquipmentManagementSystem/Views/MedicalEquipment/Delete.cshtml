@@ -1,0 +1,76 @@
+@model MedicalEquipmentManagementSystem.Models.MedicalEquipment
+
+@{
+    ViewData["Title"] = "Usuñ sprzêt";
+}
+
+<h1 class="text-danger">@ViewData["Title"]</h1>
+
+<div class="alert alert-warning" role="alert">
+    <h4 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Uwaga!</h4>
+    <p>Czy na pewno chcesz usun¹æ ten sprzêt? Ta operacja jest <strong>nieodwracalna</strong>.</p>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card border-danger mb-4">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Sprzêt do usuniêcia</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Name)</dt>
+                    <dd class="col-sm-8"><strong>@Html.DisplayFor(model => model.Name)</strong></dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SerialNumber)</dt>
+                    <dd class="col-sm-8"><code>@Html.DisplayFor(model => model.SerialNumber)</code></dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Manufacturer)</dt>
+                    <dd class="col-sm-8">@(Model.Manufacturer ?? "-")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Model)</dt>
+                    <dd class="col-sm-8">@(Model.Model ?? "-")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Category)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Category)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Location)</dt>
+                    <dd class="col-sm-8">@(Model.Location ?? "-")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Status)</dt>
+                    <dd class="col-sm-8">
+                        @{
+                            var statusName = Model.Status switch
+                            {
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.Active => "Aktywny",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderRepair => "W naprawie",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.Decommissioned => "Wycofany",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderMaintenance => "W konserwacji",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.PendingDelivery => "Oczekuje na dostawê",
+                                _ => "Nieznany"
+                            };
+                        }
+                        @statusName
+                    </dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+                    <dd class="col-sm-8">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+                </dl>
+            </div>
+        </div>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Tak, usuñ sprzêt
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-x-lg"></i> Nie, anuluj
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

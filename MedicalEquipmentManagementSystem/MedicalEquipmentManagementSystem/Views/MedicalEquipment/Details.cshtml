@@ -1,0 +1,143 @@
+@model MedicalEquipmentManagementSystem.Models.MedicalEquipment
+
+@{
+    ViewData["Title"] = "Szczegó³y sprzêtu";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h4>@Model.Name</h4>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Podstawowe informacje</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Name)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SerialNumber)</dt>
+                    <dd class="col-sm-8"><code>@Html.DisplayFor(model => model.SerialNumber)</code></dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Manufacturer)</dt>
+                    <dd class="col-sm-8">@(Model.Manufacturer ?? "-")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Model)</dt>
+                    <dd class="col-sm-8">@(Model.Model ?? "-")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Category)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Category)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Location)</dt>
+                    <dd class="col-sm-8">@(Model.Location ?? "-")</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Status i daty</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Status)</dt>
+                    <dd class="col-sm-8">
+                        @{
+                            var statusClass = Model.Status switch
+                            {
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.Active => "bg-success",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderRepair => "bg-warning text-dark",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.Decommissioned => "bg-secondary",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderMaintenance => "bg-info text-dark",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.PendingDelivery => "bg-primary",
+                                _ => "bg-light text-dark"
+                            };
+                            var statusName = Model.Status switch
+                            {
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.Active => "Aktywny",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderRepair => "W naprawie",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.Decommissioned => "Wycofany",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderMaintenance => "W konserwacji",
+                                MedicalEquipmentManagementSystem.Models.EquipmentStatus.PendingDelivery => "Oczekuje na dostawê",
+                                _ => "Nieznany"
+                            };
+                        }
+                        <span class="badge @statusClass fs-6">@statusName</span>
+                    </dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PurchaseDate)</dt>
+                    <dd class="col-sm-8">@(Model.PurchaseDate?.ToString("dd.MM.yyyy") ?? "-")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.LastMaintenanceDate)</dt>
+                    <dd class="col-sm-8">@(Model.LastMaintenanceDate?.ToString("dd.MM.yyyy") ?? "-")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.NextMaintenanceDate)</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.NextMaintenanceDate.HasValue)
+                        {
+                            var isOverdue = Model.NextMaintenanceDate.Value < DateOnly.FromDateTime(DateTime.Today);
+                            <span class="@(isOverdue ? "text-danger fw-bold" : "")">
+                                @Model.NextMaintenanceDate.Value.ToString("dd.MM.yyyy")
+                                @if (isOverdue)
+                                {
+                                    <span class="badge bg-danger ms-2">Przeterminowany!</span>
+                                }
+                            </span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Notes))
+        {
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">@Html.DisplayNameFor(model => model.Notes)</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0" style="white-space: pre-wrap;">@Model.Notes</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-light mb-4">
+            <div class="card-body">
+                <h6 class="card-title">Informacje o rekordzie</h6>
+                <dl class="mb-0">
+                    <dt>ID</dt>
+                    <dd>@Model.Id</dd>
+                    <dt>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+                    <dd>@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+                    @if (Model.UpdatedAt.HasValue)
+                    {
+                        <dt>@Html.DisplayNameFor(model => model.UpdatedAt)</dt>
+                        <dd>@Model.UpdatedAt.Value.ToString("dd.MM.yyyy HH:mm")</dd>
+                    }
+                </dl>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="bi bi-pencil"></i> Edytuj
+            </a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                <i class="bi bi-trash"></i> Usuñ
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Powrót do listy
+            </a>
+        </div>
+    </div>
+</div>

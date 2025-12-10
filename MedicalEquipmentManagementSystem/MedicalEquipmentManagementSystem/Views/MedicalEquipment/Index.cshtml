@@ -1,0 +1,114 @@
+@model IEnumerable<MedicalEquipmentManagementSystem.Models.MedicalEquipment>
+
+@{
+    ViewData["Title"] = "Sprzêt medyczny";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["SuccessMessage"] is not null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Dodaj nowy sprzêt
+    </a>
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Brak sprzêtu medycznego w bazie danych. Dodaj pierwszy element, klikaj¹c przycisk powy¿ej.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.SerialNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.Category)</th>
+                    <th>@Html.DisplayNameFor(model => model.Location)</th>
+                    <th>@Html.DisplayNameFor(model => model.Status)</th>
+                    <th>@Html.DisplayNameFor(model => model.NextMaintenanceDate)</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td><code>@Html.DisplayFor(modelItem => item.SerialNumber)</code></td>
+                        <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                        <td>
+                            @{
+                                var statusClass = item.Status switch
+                                {
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.Active => "bg-success",
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderRepair => "bg-warning text-dark",
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.Decommissioned => "bg-secondary",
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderMaintenance => "bg-info text-dark",
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.PendingDelivery => "bg-primary",
+                                    _ => "bg-light text-dark"
+                                };
+                                var statusName = item.Status switch
+                                {
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.Active => "Aktywny",
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderRepair => "W naprawie",
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.Decommissioned => "Wycofany",
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.UnderMaintenance => "W konserwacji",
+                                    MedicalEquipmentManagementSystem.Models.EquipmentStatus.PendingDelivery => "Oczekuje na dostawê",
+                                    _ => "Nieznany"
+                                };
+                            }
+                            <span class="badge @statusClass">@statusName</span>
+                        </td>
+                        <td>
+                            @if (item.NextMaintenanceDate.HasValue)
+                            {
+                                var isOverdue = item.NextMaintenanceDate.Value < DateOnly.FromDateTime(DateTime.Today);
+                                <span class="@(isOverdue ? "text-danger fw-bold" : "")">
+                                    @item.NextMaintenanceDate.Value.ToString("dd.MM.yyyy")
+                                    @if (isOverdue)
+                                    {
+                                        <span class="badge bg-danger">Przeterminowany</span>
+                                    }
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info" title="Szczegó³y">
+                                    <i class="bi bi-eye"></i> Szczegó³y
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning" title="Edytuj">
+                                    <i class="bi bi-pencil"></i> Edytuj
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Usuñ">
+                                    <i class="bi bi-trash"></i> Usuñ
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="text-muted">
+        £¹cznie: @Model.Count() elementów
+    </div>
+}
