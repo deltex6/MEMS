@@ -15,7 +15,8 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
-      - medicalequipment.db
+      medicalequipment.db:
+        condition: service_healthy
     restart: unless-stopped
   
   medicalequipment.db:

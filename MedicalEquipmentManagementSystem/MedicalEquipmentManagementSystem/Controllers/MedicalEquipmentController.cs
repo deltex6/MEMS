@@ -123,7 +123,7 @@ public class MedicalEquipmentController : Controller
     /// <returns>Przekierowanie do listy lub widok z b³êdami walidacji.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SerialNumber,Manufacturer,Model,Category,Location,Status,PurchaseDate,LastMaintenanceDate,NextMaintenanceDate,Notes,CreatedAt")] MedicalEquipment equipment)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SerialNumber,Manufacturer,Model,Category,Location,Status,PurchaseDate,LastMaintenanceDate,NextMaintenanceDate,Notes")] MedicalEquipment equipment)
     {
         if (id != equipment.Id)
         {
@@ -139,6 +139,13 @@ public class MedicalEquipmentController : Controller
         {
             try
             {
+                var existingEquipment = await _context.MedicalEquipments.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+                if (existingEquipment is null)
+                {
+                    return NotFound();
+                }
+
+                equipment.CreatedAt = existingEquipment.CreatedAt;
                 equipment.UpdatedAt = DateTime.UtcNow;
                 _context.Update(equipment);
                 await _context.SaveChangesAsync();
