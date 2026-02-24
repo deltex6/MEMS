@@ -1,19 +1,22 @@
 using MedicalEquipmentManagementSystem.Data;
 using MedicalEquipmentManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicalEquipmentManagementSystem.Controllers;
 
 /// <summary>
-/// Kontroler obs³uguj¹cy operacje CRUD na sprzêcie medycznym.
+/// Kontroler obsÅ‚ugujÄ…cy operacje CRUD na sprzÄ™cie medycznym.
+/// DostÄ™p do wszystkich akcji wymaga zalogowania uÅ¼ytkownika.
 /// </summary>
+[Authorize]
 public class MedicalEquipmentController : Controller
 {
     private readonly ApplicationDbContext _context;
 
     /// <summary>
-    /// Inicjalizuje now¹ instancjê kontrolera.
+    /// Inicjalizuje nowï¿½ instancjï¿½ kontrolera.
     /// </summary>
     /// <param name="context">Kontekst bazy danych.</param>
     public MedicalEquipmentController(ApplicationDbContext context)
@@ -22,9 +25,9 @@ public class MedicalEquipmentController : Controller
     }
 
     /// <summary>
-    /// Wyœwietla listê ca³ego sprzêtu medycznego.
+    /// Wyï¿½wietla listï¿½ caï¿½ego sprzï¿½tu medycznego.
     /// </summary>
-    /// <returns>Widok z list¹ sprzêtu.</returns>
+    /// <returns>Widok z listï¿½ sprzï¿½tu.</returns>
     public async Task<IActionResult> Index()
     {
         var equipment = await _context.MedicalEquipments
@@ -35,10 +38,10 @@ public class MedicalEquipmentController : Controller
     }
 
     /// <summary>
-    /// Wyœwietla szczegó³y wybranego sprzêtu.
+    /// Wyï¿½wietla szczegï¿½y wybranego sprzï¿½tu.
     /// </summary>
-    /// <param name="id">Identyfikator sprzêtu.</param>
-    /// <returns>Widok ze szczegó³ami sprzêtu lub NotFound.</returns>
+    /// <param name="id">Identyfikator sprzï¿½tu.</param>
+    /// <returns>Widok ze szczegï¿½ami sprzï¿½tu lub NotFound.</returns>
     public async Task<IActionResult> Details(int? id)
     {
         if (id is null)
@@ -58,7 +61,7 @@ public class MedicalEquipmentController : Controller
     }
 
     /// <summary>
-    /// Wyœwietla formularz tworzenia nowego sprzêtu.
+    /// Wyï¿½wietla formularz tworzenia nowego sprzï¿½tu.
     /// </summary>
     /// <returns>Widok formularza tworzenia.</returns>
     public IActionResult Create()
@@ -67,17 +70,17 @@ public class MedicalEquipmentController : Controller
     }
 
     /// <summary>
-    /// Przetwarza formularz tworzenia nowego sprzêtu.
+    /// Przetwarza formularz tworzenia nowego sprzï¿½tu.
     /// </summary>
-    /// <param name="equipment">Dane nowego sprzêtu.</param>
-    /// <returns>Przekierowanie do listy lub widok z b³êdami walidacji.</returns>
+    /// <param name="equipment">Dane nowego sprzï¿½tu.</param>
+    /// <returns>Przekierowanie do listy lub widok z bï¿½ï¿½dami walidacji.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Name,SerialNumber,Manufacturer,Model,Category,Location,Status,PurchaseDate,LastMaintenanceDate,NextMaintenanceDate,Notes")] MedicalEquipment equipment)
     {
         if (await _context.MedicalEquipments.AnyAsync(e => e.SerialNumber == equipment.SerialNumber))
         {
-            ModelState.AddModelError(nameof(equipment.SerialNumber), "Sprzêt o tym numerze seryjnym ju¿ istnieje.");
+            ModelState.AddModelError(nameof(equipment.SerialNumber), "Sprzï¿½t o tym numerze seryjnym juï¿½ istnieje.");
         }
 
         if (ModelState.IsValid)
@@ -85,7 +88,7 @@ public class MedicalEquipmentController : Controller
             equipment.CreatedAt = DateTime.UtcNow;
             _context.Add(equipment);
             await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = $"Pomyœlnie dodano sprzêt: {equipment.Name}";
+            TempData["SuccessMessage"] = $"Pomyï¿½lnie dodano sprzï¿½t: {equipment.Name}";
 
             return RedirectToAction(nameof(Index));
         }
@@ -94,9 +97,9 @@ public class MedicalEquipmentController : Controller
     }
 
     /// <summary>
-    /// Wyœwietla formularz edycji sprzêtu.
+    /// Wyï¿½wietla formularz edycji sprzï¿½tu.
     /// </summary>
-    /// <param name="id">Identyfikator sprzêtu do edycji.</param>
+    /// <param name="id">Identyfikator sprzï¿½tu do edycji.</param>
     /// <returns>Widok formularza edycji lub NotFound.</returns>
     public async Task<IActionResult> Edit(int? id)
     {
@@ -116,11 +119,11 @@ public class MedicalEquipmentController : Controller
     }
 
     /// <summary>
-    /// Przetwarza formularz edycji sprzêtu.
+    /// Przetwarza formularz edycji sprzï¿½tu.
     /// </summary>
-    /// <param name="id">Identyfikator sprzêtu.</param>
-    /// <param name="equipment">Zaktualizowane dane sprzêtu.</param>
-    /// <returns>Przekierowanie do listy lub widok z b³êdami walidacji.</returns>
+    /// <param name="id">Identyfikator sprzï¿½tu.</param>
+    /// <param name="equipment">Zaktualizowane dane sprzï¿½tu.</param>
+    /// <returns>Przekierowanie do listy lub widok z bï¿½ï¿½dami walidacji.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SerialNumber,Manufacturer,Model,Category,Location,Status,PurchaseDate,LastMaintenanceDate,NextMaintenanceDate,Notes")] MedicalEquipment equipment)
@@ -132,7 +135,7 @@ public class MedicalEquipmentController : Controller
 
         if (await _context.MedicalEquipments.AnyAsync(e => e.SerialNumber == equipment.SerialNumber && e.Id != id))
         {
-            ModelState.AddModelError(nameof(equipment.SerialNumber), "Sprzêt o tym numerze seryjnym ju¿ istnieje.");
+            ModelState.AddModelError(nameof(equipment.SerialNumber), "Sprzï¿½t o tym numerze seryjnym juï¿½ istnieje.");
         }
 
         if (ModelState.IsValid)
@@ -149,7 +152,7 @@ public class MedicalEquipmentController : Controller
                 equipment.UpdatedAt = DateTime.UtcNow;
                 _context.Update(equipment);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = $"Pomyœlnie zaktualizowano sprzêt: {equipment.Name}";
+                TempData["SuccessMessage"] = $"Pomyï¿½lnie zaktualizowano sprzï¿½t: {equipment.Name}";
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -168,10 +171,10 @@ public class MedicalEquipmentController : Controller
     }
 
     /// <summary>
-    /// Wyœwietla potwierdzenie usuniêcia sprzêtu.
+    /// Wyï¿½wietla potwierdzenie usuniï¿½cia sprzï¿½tu.
     /// </summary>
-    /// <param name="id">Identyfikator sprzêtu do usuniêcia.</param>
-    /// <returns>Widok potwierdzenia usuniêcia lub NotFound.</returns>
+    /// <param name="id">Identyfikator sprzï¿½tu do usuniï¿½cia.</param>
+    /// <returns>Widok potwierdzenia usuniï¿½cia lub NotFound.</returns>
     public async Task<IActionResult> Delete(int? id)
     {
         if (id is null)
@@ -191,9 +194,9 @@ public class MedicalEquipmentController : Controller
     }
 
     /// <summary>
-    /// Przetwarza usuniêcie sprzêtu.
+    /// Przetwarza usuniï¿½cie sprzï¿½tu.
     /// </summary>
-    /// <param name="id">Identyfikator sprzêtu do usuniêcia.</param>
+    /// <param name="id">Identyfikator sprzï¿½tu do usuniï¿½cia.</param>
     /// <returns>Przekierowanie do listy.</returns>
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
@@ -206,17 +209,17 @@ public class MedicalEquipmentController : Controller
             var name = equipment.Name;
             _context.MedicalEquipments.Remove(equipment);
             await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = $"Pomyœlnie usuniêto sprzêt: {name}";
+            TempData["SuccessMessage"] = $"Pomyï¿½lnie usuniï¿½to sprzï¿½t: {name}";
         }
 
         return RedirectToAction(nameof(Index));
     }
 
     /// <summary>
-    /// Sprawdza czy sprzêt o podanym Id istnieje.
+    /// Sprawdza czy sprzï¿½t o podanym Id istnieje.
     /// </summary>
-    /// <param name="id">Identyfikator sprzêtu.</param>
-    /// <returns>True jeœli sprzêt istnieje, w przeciwnym razie false.</returns>
+    /// <param name="id">Identyfikator sprzï¿½tu.</param>
+    /// <returns>True jeï¿½li sprzï¿½t istnieje, w przeciwnym razie false.</returns>
     private async Task<bool> EquipmentExistsAsync(int id)
     {
         return await _context.MedicalEquipments.AnyAsync(e => e.Id == id);
