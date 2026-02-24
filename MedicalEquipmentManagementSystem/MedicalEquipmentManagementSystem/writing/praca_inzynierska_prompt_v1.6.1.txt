@@ -1,0 +1,363 @@
+Projekt Zespołowy – projektowanie
+i implementacja
+na kierunku informatyka
+w specjalność Inżynieria Oprogramowania
+
+
+SYSTEM WSPOMAGAJĄCY ZARZĄDZENIE SPECJALISTYCZNYM WYPOSAŻENIEM PLACÓWEK MEDYCZNYCH – PROJEKT I REALIZACJA
+
+
+Tomasz Persa
+99657
+
+
+
+---
+
+SPIS TREŚCI
+1. Opis ogólny problemu
+2. Przegląd rynku z wnioskami w odniesieniu do tematu projektu
+2.1. Przegląd rynku
+2.2.  Wnioski
+3. Harmonogram prac na zajęciach z podziałem na poszczególne spotkania
+4. Cel, zakres i kontekst pracy
+4.1.  Cel
+4.2.  Zakres
+4.3.  Kontekst
+5.  Wymagania funkcjonalne i niefunkcjonalne
+5.1.  Wymagania funkcjonalne
+5.2.  Wymagania niefunkcjonalne
+6.  Diagram pakietów
+7.  Diagramy systemowych przypadków użycia
+8.  Scenariusze systemowych przypadków użycia i/lub historyjki użytkownika
+9.  Diagram klas
+10.  Diagram sekwencji (opcjonalnie)
+11.  Model danych
+12.  Projekt interfejsu użytkownika
+13.  Opis implementacji
+13.1. Struktura projektu
+13.1.1.  Podział systemu na warstwy (?)
+13.1.2.  Struktura aplikacji
+13.2.  Implementacja kluczowych funkcjonalności systemu
+13.2.1.  Połączenie z bazą danych
+13.2.2. Ewidencjonowanie sprzętu medycznego
+13.2.3.  Przypisywanie sprzętu do lokalizacji i użytkowników
+13.2.4.  Rejestracja zgłoszeń awarii
+13.2.5.  Podstawowe operacje CRUD na bazie danych
+13.3.  Proces implementacji aplikacji (?)
+14. Bibliografia
+(planowane dodanie spisu automatycznego i ewentualna edycja układu pracy)
+Opis ogólny problemu
+
+
+
+---
+
+Opis ogólny problemu
+
+    Pomysł niniejszej pracy powstał dzięki zainteresowaniu dziedzin elektroniki, robotyki oraz chęcią zaprojektowania systemu informatycznego, którego zastosowanie byłoby potrzebne w dzisiejszej sytuacji rynkowej, przy czym sama praca poruszałaby ważne zagadnienie dla społeczeństwa, jakim jest zarządzanie sprzętem w placówce ochrony zdrowia. (sam wstęp ładnie zmienić) Przedstawiony system, który zaprojektowałem przypomina system klasy CMMS (ang. Computerized Maintenance Management System) zbudowanego pod kątem specjalistycznej aparatury medycznej. Takiego rodzaju systemy informatyczne pierwotnie miały za zadanie zapewnić niezawodność funkcjonowania zakładów produkcyjnych pod kątem sprawności parku maszynowego. Typowy system CMMS przeważnie gromadzi informacje dotyczące awarii, przeglądów, stanów magazynowych i ułatwia organizację pracy. Systemy CMMS są szeroko stosowane w przemyśle wytwórczym, produkcyjnym, sektorze energetycznym, transporcie, logistyce, zarządzaniu nieruchomościami czy gastronomii i hotelarstwie [p?]. W sektorze ochrony zdrowia systemy CMMS również z powodzeniem znalazły wykorzystanie [p?]. Nierzadko systemy CMMS są powiązane lub są częściami większych systemów wspomagających zarządzanie zasobami danej firmy (np. z systemami EAM [p?], ERP[p?]).
+(powyżej dopisać o systemie EAM, że projektowany system też jest do niego podobny)
+    Warto wyjaśnić również czym jest omawiana specjalistyczna aparatura medyczna oraz placówka medyczna, aby lepiej zrozumieć przedstawione rozwiązanie informatyczne. W świetle prawa nie istnieje definicja specjalistycznej aparatury medycznej. To pojęcie można rozumieć jako sprzęt medyczny wysokiej klasy ryzyka. Taki sprzęt musi spełniać definicję wyrobu medycznego [p], zostać sklasyfikowany zgodnie z rozporządzeniem parlamentu Europejskiego MDR [p], zostać poddany wymaganej ocenie zgodności [p] i być oznakowany znakiem CE [p]. Warto zaznaczyć, że tak pojmowana specjalistyczna aparatura nie musi zawierać elementów elektronicznych.
+(sprawdzić poniższe)
+    Aparaturę medyczną można podzielić na kategorie według ich zastosowania:
+•	Aparatura diagnostyczna - służy do wykrywania i oceny chorób
+przykład: Tomograf
+•	Aparatura terapeutyczna - wspomaga leczenie chorób i stanów nagłych
+przykład: defibrylator, pompa insulinowa, inkubator noworodkowy
+•	Aparatura Monitorująca - służy do ciągłej obserwacji stanu pacjenta
+przykład: Kardiomonitor, pulsoksymetr
+•	Aparatura Laboratoryjna - wykorzystywana jest do analizy próbek biologicznych i uzyskiwania danych pomocnych w diagnozowaniu
+przykłady: wirówka laboratoryjna, mikroskop
+    Placówka medyczna to placówka publiczna, udzielająca świadczeń zdrowotnych w ramach publicznego systemu opieki zdrowotnej w państwie leczenia, a także każda placówka prywatna udzielająca świadczeń zdrowotnych poza publicznym systemem opieki zdrowotnej w państwie leczenia.
+
+(poniższa część będzie jeszcze edytowana, aby była bardziej spójna z tekstem)
+Zarządzanie specjalistyczną aparaturą w placówce medycznej polega na:
+
+Budżetowaniu
+•	zakup sprzętu
+•	eksploatacja sprzętu
+•	analiza i przewidywanie wydatków
+
+Organizowaniu szkoleń do eksploatacji sprzętu
+
+Utrzymaniu i serwisowaniu sprzętu
+•	testy i kalibracja sprzętu (po zakupie i okresowo)
+•	regularne przeglądy techniczne
+•	naprawy i serwisowanie urządzeń
+
+Zarządzaniu dokumentacją i rejestrowaniu danych
+•	ewidencjonowanie dokumentacji sprzętu
+•	ewidencjonowanie dodatkowych dokumentów
+
+Ewidencjonowaniu specjalistycznego sprzętu medycznego
+
+Przypisywaniu sprzętu do danych osób, oddziałów i miejsc w placówce medycznej
+•	ewidencjonowanie osób, oddziałów i wybranych pomieszczeń w placówce medycznej
+ 
+   Monitorowaniu i ocenie efektywności działania sprzętu medycznego
+•	raporty działania specjalistycznej aparatury również w czasie rzeczywistym
+•	ocena ryzyka wystąpienia uszkodzeń sprzętu
+
+
+    W zakres rozpatrywanego problemu będą wchodziły następujące zagadnienia:
+•	Ewidencjonowanie specjalistycznego sprzętu medycznego
+•	Przypisywanie sprzętu do danych osób, jednostek organizacyjnych, pomieszczeń w szpitalu
+•	Planowanie przeglądów technicznych i innych czynności związanych z obsługą urządzeń
+•	Raportowanie działania aparatury (w tym zgłaszanie awarii oprzyrządowania) (chodzi o ręczne wprowadzanie danych przez personel o aparaturze)
+•	Historia awarii i napraw sprzętu
+•	Zarządzanie częściami zapasowymi/zapasową aparaturą (magazyn aparatury)
+•	Zarządzanie dokumentacją oprzyrządowania oraz procedurami z nim związanymi
+•	(System powiadomień?) 
+•	(generowanie raportów?) 
+(będę ewentualnie okrajał problematykę)
+
+W zakres rozpatrywanego problemu nie wchodzą:
+•	Monitorowaniu i ocenie efektywności działania sprzętu medycznego
+•	Automatycznemu raportowaniu działania aparatury w czasie rzeczywistym
+
+(ta część będzie jeszcze edytowana, aby była bardziej spójna z tekstem)
+(Tworzony system będzie w wersji ‘okrojonej’ większych systemów, z niezbędnymi funkcjonalnościami) (opis ogólny projektu będzie jeszcze bardziej rozbudowany)
+
+
+
+---
+
+Przegląd rynku z wnioskami w odniesieniu do tematu projektu
+
+Przegląd rynku
+
+Rejestr urządzeń medycznych firmy ‘Meteoryt’ (Polski wydawca, dostęp do wersji demo przez 30 dni)
+https://meteoryt.com/Rejestr_Urzadzen_Medycznych-c68.html
+
+Oprogramowanie IFS do zarządzania technologią ochrony zdrowia firmy ‘IFS’
+https://www.ifs.com/pl/solutions/capabilities/healthcare-technology-management
+
+Moduł Aparatura Medyczna – Appmedica.AM firmy ‘appmedica’
+https://www.appmedica.pl/aparatura-medyczna/
+
+(potrzebna dokumentacja, nie potrzeba programów demo) (3 wystarczy)
+
+ 
+
+Wnioski
+
+    Na rynku ogólnoświatowym jak i Polskim istnieją rozwiązania podobne projektowanego, jakie, lecz ze względu na wysoko wyspecjalizowaną dziedzinę takich systemów jest dość mało przykładowo w porównaniu do systemów ERP.
+(Przegląd rynku z wnioskami w odniesieniu do tematu projektu będą rozbudowywane)
+ 
+
+
+---
+
+Cel, zakres i kontekst systemu
+(Cel, zakres i kontekst systemu będą rozbudowywane)
+
+Cel
+    Celem projektowanego uniwersalnego systemu informatycznego jest wspomaganie funkcjonowania placówek medycznych w zakresie zarządzania specjalistycznym sprzętem medycznym w formie aplikacji internetowej, z technologiami użytymi: 
+•	Język C# w wersji 14 z platformą .NET w wersji 10;
+•	Biblioteka Bootstrap w warstwie prezentacji;
+•	ASP.NET Core, biblioteka Npgsql.EntityFrameworkCore w warstwie logiki biznesowej;
+•	Baza danych PostgreSQL;
+•	Visual Studio jako Zintegrowane Środowisko Programistyczne;
+•	JWT Microsoft Identity jako narzędzia do autoryzacji i autentykacji.
+•	Docker i Docker Compose jako narzędzia do konteneryzacji
+•	Program Postman i biblioteka XUnit jako narzędzia do testowania aplikacji
+
+
+
+Zakres
+    Zakres obejmuje:
+•	analizę rynku;
+•	analizę i wybór technologii;
+•	zarysowanie działania projektowanego rozwiązania;
+•	zdefiniowanie celu, zakresu i kontekstu pracy;
+•	zdefiniowanie wymagań funkcjonalnych i niefunkcjonalnych;
+•	projektowanie systemu za pomocą diagramów UML;
+•	przygotowanie i testowanie aplikacji;
+•	przygotowanie listy cytowani;
+•	ukończenie pracy pisemnej.
+
+
+
+Kontekst
+Kontekstem systemu są wszelkiego rodzaju placówki medyczne, takie jak laboratoria medyczne, przychodnie lekarskie czy szpitale. Opisywany system informatyczny będzie dopełniał tego typu rzeczy. (wymienić więcej)
+
+(mogę napisać o różnych rodzajach placówek medycznych takie jak 3 szczeblach opieki zdrowotnej
+https://pacjent.gov.pl/system-opieki-zdrowotnej )
+
+
+
+---
+
+Wymagania funkcjonalne i niefunkcjonalne
+
+
+
+Wymagania funkcjonalne
+
+System umożliwia ewidencję sprzętu i dokumentacji oprzyrządowania (rozumiem, że do tego punktu należy również przypisywanie sprzętu do danych osób, jednostek organizacyjnych, pomieszczeń w szpitalu)
+System umożliwia ewidencję zapasowych części oprzyrządowania. (jeżeli starczy czasu, to można spróbować implementować)
+
+System umożliwia proces rejestracji dla administratora i użytkownika. System umożliwia użytkownikowi stworzenie konta służbowego, a administrator będzie je sprawdzał i zatwierdzał. Administrator może edytować konta użytkowników. Użytkownik oraz administrator mają opcję logowania.
+Użytkownik może edytować swoje konto za zgodą administratora (użytkownik edytuje konto, a administrator zatwierdza)
+System rejestruje zmiany w bazie danych (dotyczące użytkowników, sprzętu itp.) w 'logach', które będzie mógł wyświetlać administrator.
+
+System implementuje harmonogram przeglądów sprzętu. (to zaimplementować)
+Użytkownik może zgłaszać awarię sprzętu.
+Użytkownik może nadawać stopnie pilności awarii. (jeżeli starczy czasu, to można spróbować implementować)
+Użytkownik oraz administrator mogą edytować zgłoszenia awarii. (jeżeli starczy czasu, to można spróbować implementować)
+Administrator może zamykać zgłoszenia awarii, lub system może to zrobić automatycznie.
+
+System umożliwia przypisywanie oprzyrządowania do użytkowników oraz miejsc w placówce medycznej. (to zaimplementować)
+
+
+(ta sekcja będzie rozwijana) ((mocno się temu przyjrzeć))
+
+
+
+Wymagania niefunkcjonalne
+
+Każdy pracownik zajmujący się aparaturą medyczną powinien posiadać konto służbowe w systemie.
+Aby aplikacja użytkownika działała, potrzebny jest komputer systemem operacyjnym ‘Windows’, ‘Linux’ lub ‘MacOS’, z dostępem do Internetu oraz jedną z przeglądarek:
+Google Chrome,
+Opera,
+Mozilla Firefox,
+Microsoft Edge,
+Safari (to ewentualnie usunąć, nie wiem czy zadziała, bo nie bazuje na silniku chromium).
+
+Czas odpowiedzi interfejsu poniżej 2 sekund dla większości operacji. (to ewentualnie usunąć)
+Możliwość obsługi rosnącej liczby urządzeń i zgłoszeń bez degradacji wydajności.
+Intuicyjny i prosty w użytku interfejs spełniający wymagania WCAG 2.1 na poziomie AA.
+
+Prostota strukturalna systemu umożliwiająca łatwą integrację z innymi systemami w placówkach medycznych.
+Stosunkowa łatwość i prostota wdrożenia systemu.
+
+
+
+---
+
+Opis Implementacji
+(Prawdopodobnie usunąć ten rozdział lub przenieść jego treść do innego podrozdziału)
+(Treść tego rozdziału ulegnie zmianom)
+
+Struktura projektu
+
+Podział systemu na warstwy aplikacji
+    Warstwa prezentacji odpowiada za interakcję z użytkownikiem końcowym, generowanie interfejsu graficznego i interfejsu HTML oraz przekazywanie żądań do kontrolerów.
+    Warstwa logiki biznesowej realizuje przepływ danych w aplikacji, walidację danych wejściowych, kieruje żądania do odpowiednich usług oraz koordynuje działania pomiędzy warstwą prezentacji a warstwą dostępu do danych.
+    Warstwa dostępu do danych realizuje operacje na bazie danych oraz translację obiektów domenowych do postaci relacyjnej bazy danych.
+W tej pracy warstwa prezentacji jest uznawana za część kliencką, a warstwa logiki biznesowej i dostępu do danych za część serwerową. (jakby co system nie będzie dzielony na części MVC)
+
+Omówienie najważniejszych katalogów i plików
+Poniżej zestawiono najważniejsze katalogi i pliki w projekcie wraz z krótkim opisem ich roli oraz przypisaniem do warstw architektury aplikacji.
+ 
+[rysunek]
+Rysunek 1. Struktura plikowa projektowanej aplikacji
+
+[rysunek]
+Rysunek 2. Struktura plikowa projektowanej aplikacji cd.
+
+
+Warstwa prezentacji
+Warstwa prezentacji odpowiada za generowanie interfejsu użytkownika (HTML/CSS/JavaScript) oraz obsługę mechanizmów Razor (widoki i strony tożsamości).
+•	Views/ - główny katalog widoków Razor wykorzystywanych przez kontrolery MVC.
+•	Views/Home/ - widoki powiązane z kontrolerem HomeController.
+•	Views/Home/Index.cshtml - strona główna aplikacji.
+•	Views/Home/Privacy.cshtml - przykładowa strona polityki prywatności.
+•	Views/MedicalEquipment/ - widoki CRUD dla encji sprzętu medycznego.
+•	Views/MedicalEquipment/Index.cshtml - lista sprzętu.
+•	Views/MedicalEquipment/Details.cshtml - szczegóły wybranego elementu.
+•	Views/MedicalEquipment/Create.cshtml - formularz dodawania sprzętu.
+•	Views/MedicalEquipment/Edit.cshtml - formularz edycji sprzętu.
+•	Views/MedicalEquipment/Delete.cshtml - potwierdzenie usunięcia.
+•	Views/Shared/ - elementy współdzielone przez wiele widoków.
+•	Views/Shared/_Layout.cshtml - główny szablon układu strony (nagłówek, stopka, menu).
+•	Views/Shared/_Layout.cshtml.css - style powiązane z układem strony.
+•	Views/Shared/_LoginPartial.cshtml - fragment UI odpowiedzialny za wyświetlenie stanu logowania użytkownika.
+•	Views/Shared/_ValidationScriptsPartial.cshtml - skrypty wspierające walidację po stronie klienta.
+•	Views/Shared/Error.cshtml - widok błędu aplikacji.
+•	Views/_ViewImports.cshtml - wspólne dyrektywy Razor (np. using, tag helpery) dla widoków.
+•	Views/_ViewStart.cshtml - ustawienia startowe widoków, m.in. domyślny layout.
+•	Areas/Identity/ - obszar Razor Pages generowany przez ASP.NET Core Identity, odpowiedzialny za ekrany uwierzytelniania (logowanie, rejestracja, zarządzanie kontem).
+•	Areas/Identity/Pages/_ViewStart.cshtml - konfiguracja layoutu dla stron w obszarze tożsamości.
+•	wwwroot/ - statyczne zasoby dostępne dla przeglądarki.
+•	wwwroot/js/site.js - skrypt JavaScript aplikacji.
+•	wwwroot/lib/ - biblioteki front-end (np. Bootstrap, jQuery, walidacja) instalowane i używane w warstwie UI.
+
+Warstwa sterowania i logiki aplikacyjnej
+Warstwa sterowania i logiki aplikacyjnej realizuje obsługę żądań HTTP, koordynuje przepływ danych oraz wykorzystuje warstwę dostępu do danych do realizacji operacji biznesowych.
+•	Controllers/ - kontrolery ASP.NET Core MVC (punkt wejścia dla żądań użytkownika).
+•	Controllers/HomeController.cs - kontroler obsługujący podstawowe strony (np. strona główna, widok błędu).
+•	Controllers/MedicalEquipmentController.cs - kontroler realizujący operacje CRUD na sprzęcie medycznym (współpracuje z kontekstem bazy danych).
+•	Models/ - modele domenowe oraz modele pomocnicze używane przez warstwę sterowania i prezentacji.
+•	Models/MedicalEquipment.cs - encja domenowa reprezentująca sprzęt medyczny w systemie.
+•	Models/ErrorViewModel.cs - model używany w widoku błędu.
+•	Program.cs - konfiguracja aplikacji i kontenera DI: rejestracja usług, konfiguracja ASP.NET Core Identity, mapowanie tras MVC i Razor Pages, inicjalizacja migracji przy starcie.
+•	appsettings.json - konfiguracja aplikacji (m.in. connection string do bazy PostgreSQL oraz ustawienia środowiskowe).
+
+Warstwa dostępu do danych
+Warstwa dostępu do danych odpowiada za mapowanie obiektowo-relacyjne oraz wykonywanie operacji na bazie danych. W projekcie korzysta ona z Entity Framework Core oraz dostawcy Npgsql dla PostgreSQL.
+•	Data/ - elementy konfiguracji bazy danych.
+•	Data/ApplicationDbContext.cs - kontekst EF Core, definiuje zestawy encji (DbSet) oraz konfigurację mapowania; jest używany przez kontrolery i/lub usługi do realizacji operacji na danych.
+•	Migrations/ - migracje EF Core pozwalające wersjonować schemat bazy danych i odtwarzać go w różnych środowiskach.
+•	Migrations/ApplicationDbContextModelSnapshot.cs - migawkowy opis modelu danych, wykorzystywany przez EF Core do generowania kolejnych migracji.
+
+Pliki infrastrukturalne (uruchomienie i wdrożenie)
+Poniższe elementy nie należą bezpośrednio do trzech warstw aplikacji, ale są istotne w kontekście uruchamiania, rozwoju i wdrażania systemu.
+•	Dockerfile - definicja budowania obrazu aplikacji .NET (etap build/publish i uruchomienie w obrazie runtime).
+•	docker-compose.override.yml - konfiguracja scenariuszy uruchomieniowych dla środowiska deweloperskiego (np. mapowania portów, zmienne środowiskowe) w połączeniu z Docker Compose.
+•	.dockerignore - lista plików i katalogów pomijanych podczas budowania obrazu Dockera.
+ 
+
+
+Implementacja kluczowych funkcjonalności systemu
+
+Połączenie z Bazą Danych
+
+Konfiguracja łańcucha połączenia
+Podstawowym elementem konfiguracji jest łańcuch połączenia (connection string), zawierający adres hosta, port, nazwę bazy, nazwę użytkownika oraz hasło. W projekcie wartość ta została umieszczona w pliku appsettings.json w sekcji ConnectionStrings, pod kluczem DefaultConnection.
+
+
+[rysunek]
+Rysunek 3. Łańcuch połączenia (connection string) do bazy danych w pliku. ‘appsettings.json’
+
+
+Rejestracja kontekstu bazy danych i dostawcy Npgsql (w pliku ‘Program.cs’)
+
+
+
+---
+
+Bibliografia
+
+
+[Opis Ogólny] System CMMS (dostęp: .12.2025):
+https://pl.wikipedia.org/wiki/Computerised_Maintenance_Management_System
+
+[Opis Ogólny] System EAM:
+
+[Opis Ogólny] [wnioski] Porównywanie CMMS (dostęp: 10.12.2025):
+http://www.stegroup.pl/attachments/article/595/R3.pdf
+
+Koncepcja zastosowania arkusza kalkulacyjnego do wspomagania realizacji procesu diagnostyki oraz napraw w wybranym szpitalu (dostęp: 10.12.2025), B. Szczęśniak, A. Bujanowska, (dostęp: 10.12.2025). (dokończyć)
+https://bibliotekanauki.pl/articles/113514
+
+Przykładowe działanie systemu CMMS ze strony ‘glowny-mechanik.pl’ (dostęp: 10.12.2025):
+https://glowny-mechanik.pl/2022/12/23/nowoczesny-system-cmms-w-praktyce-1-rejestrowanie-awarii-i-usterek/
+
+[Opis Ogólny] ROZPORZĄDZENIE PARLAMENTU EUROPEJSKIEGO I RADY (UE) 2017/745 z dnia 5 kwietnia 2017 r. w sprawie wyrobów medycznych, zmiany dyrektywy 2001/83/WE, rozporządzenia (WE) nr 178/2002 i rozporządzenia (WE) nr 1223/2009 oraz uchylenia dyrektyw Rady 90/385/EWG i 93/42/EWG (dostęp: 10.12.2025):
+https://eur-lex.europa.eu/legal-content/PL/TXT/PDF/?uri=CELEX:32017R0745#:~:text=2,konkretnie%20i%20bezpo%C5%9Brednio%20wspomaga%C4%87%20medyczn%C4%85
+https://eur-lex.europa.eu/legal-content/PL/TXT/PDF/?uri=CELEX:32017R0745
+
+[Opis Ogólny] Placówka medyczna (dostęp: 10.12.2025):
+https://kpk.nfz.gov.pl/pl/23-pl/slownik/15-slownik.html
+
+
+Podmioty wykonujące działalność leczniczą (dostęp: 10.12.2025):
+https://www.gov.pl/web/zdrowie/podmioty-wykonujace-dzialalnosc-lecznicza
+
+[Cel, zakres, kontekst: kontekst] Szczeble opieki zdrowotnej:
+https://pacjent.gov.pl/system-opieki-zdrowotnej
+
+
+(Tutaj będzie konsekwentnie umieszczana bibliografia.)
+

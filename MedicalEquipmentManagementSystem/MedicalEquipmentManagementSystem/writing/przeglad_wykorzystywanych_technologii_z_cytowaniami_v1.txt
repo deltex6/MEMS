@@ -1,0 +1,46 @@
+UWAGA: Projekt mo¿e wykorzystywaæ inne potrzebne technologie.
+
+
+
+Repozytorium z kodem implementacji pracy in¿ynierskiej: 'https://github.com/deltex6/MEMS'.
+
+Lista narzêdzi:
+
+Dokumentacja C# (dostêp: 10.12.2025):
+https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/
+
+Dokumentacja platformy .NET (dostêp: 10.12.2025):
+https://learn.microsoft.com/pl-pl/dotnet/
+
+Dokumentacja Bootstrap 5.0 (dostêp: 10.12.2025):
+https://getbootstrap.com/docs/5.0/getting-started/introduction/
+
+Dokumentacja Visual Studio (dostêp: 10.12.2025):
+https://learn.microsoft.com/en-us/visualstudio/ide/?view=visualstudio
+
+Dokumentacja  ASP.NET Core MVC (dostêp: 10.12.2025):
+https://learn.microsoft.com/en-us/aspnet/core/mvc/overview?view=aspnetcore-10.0
+
+Dokumentacja  NpgSQL (dostêp: 10.12.2025):
+https://www.npgsql.org/doc/
+
+Dokumentacja xUnit testing (dostêp: 10.12.2025):
+https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-csharp-with-xunit
+
+Dokumentacja  Visual Paradigm (dostêp: 10.12.2025):
+https://circle.visual-paradigm.com/docs/
+
+Dokumentacja  PostgreSQL 18 (dostêp: 10.12.2025):
+https://www.postgresql.org/docs/18/index.html
+
+Dokumentacja JWT (dostêp: 10.12.2025):
+https://www.jwt.io/introduction#what-is-json-web-token
+
+Dokumentacja Platformy Microsoft Identity dla aplikacji internetowych (dostêp: 10.12.2025):
+https://learn.microsoft.com/en-us/entra/identity-platform/index-web-app
+
+Dokumentacja Dockera (dostêp: 10.12.2025):
+https://docs.docker.com/
+
+Dokumentacja Docker-compose (dostêp: 10.12.2025):
+https://docs.docker.com/compose/

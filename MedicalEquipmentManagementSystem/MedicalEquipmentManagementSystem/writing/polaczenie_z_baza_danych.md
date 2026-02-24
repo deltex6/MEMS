@@ -1,0 +1,3 @@
+# Po³¹czenie z baz¹ danych
+
+W niniejszym projekcie zastosowano relacyjn¹ bazê danych PostgreSQL, do której aplikacja internetowa w œrodowisku ASP.NET Core uzyskuje dostêp z wykorzystaniem biblioteki Entity Framework Core oraz dostawcy `Npgsql.EntityFrameworkCore.PostgreSQL`. Po³¹czenie z baz¹ danych jest konfigurowane centralnie w pliku startowym aplikacji, a parametry po³¹czenia s¹ przechowywane w systemie konfiguracji ASP.NET Core.
