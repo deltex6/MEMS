@@ -20,11 +20,6 @@ namespace MedicalEquipmentManagementSystem.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [HttpGet]
         public async Task<IActionResult> DbStatus()
         {

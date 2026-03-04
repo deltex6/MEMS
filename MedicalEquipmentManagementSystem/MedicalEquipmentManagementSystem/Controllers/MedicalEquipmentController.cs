@@ -2,12 +2,14 @@ using MedicalEquipmentManagementSystem.Data;
 using MedicalEquipmentManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalEquipmentManagementSystem.Controllers;
 
 /// <summary>
 /// Kontroler obs³uguj¹cy operacje CRUD na sprzêcie medycznym.
 /// </summary>
+[Authorize]
 public class MedicalEquipmentController : Controller
 {
     private readonly ApplicationDbContext _context;
