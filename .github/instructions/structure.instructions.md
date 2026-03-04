@@ -1,4 +1,0 @@
-﻿---
-description: 'Structure plan.'
-applyTo: '**/*.*'
----

@@ -2,3 +2,7 @@
 *
 # But keep this .gitignore file
 !.gitignore
+
+# Ignore writing directory
+writing/
+writing
