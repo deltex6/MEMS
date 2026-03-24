@@ -129,12 +129,18 @@
         </div>
 
         <div class="d-grid gap-2">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
-                <i class="bi bi-pencil"></i> Edytuj
-            </a>
-            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
-                <i class="bi bi-trash"></i> Usuñ
-            </a>
+            @if (User.IsInRole(UserRoles.Administrator) || User.IsInRole(UserRoles.Technician))
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                    <i class="bi bi-pencil"></i> Edytuj
+                </a>
+            }
+            @if (User.IsInRole(UserRoles.Administrator))
+            {
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                    <i class="bi bi-trash"></i> Usuñ
+                </a>
+            }
             <a asp-action="Index" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Powrót do listy
             </a>

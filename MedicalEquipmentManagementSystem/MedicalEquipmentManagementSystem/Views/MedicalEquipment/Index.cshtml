@@ -14,11 +14,14 @@
     </div>
 }
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Dodaj nowy sprzêt
-    </a>
-</p>
+@if (User.IsInRole(UserRoles.Administrator) || User.IsInRole(UserRoles.Technician))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Dodaj nowy sprzêt
+        </a>
+    </p>
+}
 
 @if (!Model.Any())
 {
@@ -94,12 +97,18 @@ else
                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info" title="Szczegó³y">
                                     <i class="bi bi-eye"></i> Szczegó³y
                                 </a>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning" title="Edytuj">
-                                    <i class="bi bi-pencil"></i> Edytuj
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Usuñ">
-                                    <i class="bi bi-trash"></i> Usuñ
-                                </a>
+                                @if (User.IsInRole(UserRoles.Administrator) || User.IsInRole(UserRoles.Technician))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning" title="Edytuj">
+                                        <i class="bi bi-pencil"></i> Edytuj
+                                    </a>
+                                }
+                                @if (User.IsInRole(UserRoles.Administrator))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Usuñ">
+                                        <i class="bi bi-trash"></i> Usuñ
+                                    </a>
+                                }
                             </div>
                         </td>
                     </tr>

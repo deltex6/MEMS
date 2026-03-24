@@ -63,6 +63,7 @@ public class MedicalEquipmentController : Controller
     /// Wyœwietla formularz tworzenia nowego sprzêtu.
     /// </summary>
     /// <returns>Widok formularza tworzenia.</returns>
+    [Authorize(Roles = $"{UserRoles.Administrator},{UserRoles.Technician}")]
     public IActionResult Create()
     {
         return View();
@@ -75,6 +76,7 @@ public class MedicalEquipmentController : Controller
     /// <returns>Przekierowanie do listy lub widok z b³êdami walidacji.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = $"{UserRoles.Administrator},{UserRoles.Technician}")]
     public async Task<IActionResult> Create([Bind("Name,SerialNumber,Manufacturer,Model,Category,Location,Status,PurchaseDate,LastMaintenanceDate,NextMaintenanceDate,Notes")] MedicalEquipment equipment)
     {
         if (await _context.MedicalEquipments.AnyAsync(e => e.SerialNumber == equipment.SerialNumber))
@@ -100,6 +102,7 @@ public class MedicalEquipmentController : Controller
     /// </summary>
     /// <param name="id">Identyfikator sprzêtu do edycji.</param>
     /// <returns>Widok formularza edycji lub NotFound.</returns>
+    [Authorize(Roles = $"{UserRoles.Administrator},{UserRoles.Technician}")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id is null)
@@ -125,6 +128,7 @@ public class MedicalEquipmentController : Controller
     /// <returns>Przekierowanie do listy lub widok z b³êdami walidacji.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = $"{UserRoles.Administrator},{UserRoles.Technician}")]
     public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SerialNumber,Manufacturer,Model,Category,Location,Status,PurchaseDate,LastMaintenanceDate,NextMaintenanceDate,Notes")] MedicalEquipment equipment)
     {
         if (id != equipment.Id)
@@ -174,6 +178,7 @@ public class MedicalEquipmentController : Controller
     /// </summary>
     /// <param name="id">Identyfikator sprzêtu do usuniêcia.</param>
     /// <returns>Widok potwierdzenia usuniêcia lub NotFound.</returns>
+    [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id is null)
@@ -199,6 +204,7 @@ public class MedicalEquipmentController : Controller
     /// <returns>Przekierowanie do listy.</returns>
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var equipment = await _context.MedicalEquipments.FindAsync(id);
